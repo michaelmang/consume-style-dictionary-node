@@ -1,6 +1,8 @@
 const { graphql } = require("@octokit/graphql");
 const fs = require("fs");
 
+// https://github.com/motdotla/dotenv
+// You'll need to create a ".env" file with your secrets. See the ".env.example" I included.
 require("dotenv").config();
 
 const graphqlWithAuth = graphql.defaults({
@@ -17,6 +19,7 @@ const variables = {
 };
 
 async function main() {
+  // https://github.com/octokit/graphql.js
   const { repository } = await graphqlWithAuth(
     `
     query FetchDesignTokens($owner: String!, $name: String!, $tree: String!) {
@@ -39,6 +42,7 @@ async function main() {
     variables
   );
   
+  // https://nodejs.org/api/fs.html
   repository.content.entries.forEach(({ name, object: { text } }) => {
     fs.writeFileSync(`./src/tokens/${name}`, text);
   });
